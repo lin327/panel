@@ -99,6 +99,9 @@ const DeployServiceDialog = defineAsyncComponent(
     () => import('@/components/workspace/DeployServiceDialog.vue'),
 );
 
+// ?deploy=coding-agent opens the deploy dialog on that template.
+const deployTemplate = ref<string | null>(null);
+
 type ScheduledTask = {
     command: string;
     schedule: string;
@@ -671,6 +674,8 @@ onMounted(() => {
         new URLSearchParams(window.location.search).has('deploy') &&
         canDeploy.value
     ) {
+        deployTemplate.value =
+            new URLSearchParams(window.location.search).get('deploy') || null;
         showDeploy.value = true;
     }
 
@@ -1780,6 +1785,7 @@ function usage(mount: string): { percent: number; free: number } | null {
             v-model:open="showDeploy"
             :templates="templates"
             :machine-id="machine.id"
+            :start-with="deployTemplate"
             @deployed="onDeployed"
         />
         <MaintenanceDialog
