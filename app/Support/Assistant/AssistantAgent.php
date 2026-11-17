@@ -209,7 +209,7 @@ class AssistantAgent
                 }
                 $this->trim();
                 $instructions ??= $this->instructions();
-                $answer = $this->model->turn($ai, $instructions, $this->chat['messages'], $this->toolDefinitions());
+                $answer = $this->model->turn($ai, $instructions, $this->chat['messages'], $this->toolDefinitions(), conversationKey: 'assistant:'.$this->context->workspace->id.':'.$this->chat['id']);
 
                 if ($answer['text'] !== '') {
                     ($this->emit)(['type' => 'text', 'text' => $answer['text']]);
