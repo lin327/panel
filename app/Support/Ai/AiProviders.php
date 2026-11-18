@@ -28,6 +28,30 @@ class AiProviders
 
     public const MODEL_PATTERN = '/^[A-Za-z0-9._:\/\[\]-]{1,80}$/';
 
+    /** @param  array{provider: string, model: string}  $ai */
+    public static function seesImages(array $ai): bool
+    {
+        return match ($ai['provider']) {
+            'anthropic' => true,
+            // Every current OpenAI chat model reads images; only old text-only ones don't.
+            'openai' => preg_match('/^(gpt-3\.5|gpt-4-|gpt-4$|o1-mini|o3-mini)/', $ai['model']) !== 1,
+            default => $ai['model'] === config('services.groq.vision_model') || preg_match('/(llama-4|vision|qwen3\.[6-9])/i', $ai['model']) === 1,
+        };
+    }
+
+    /**
+     * The model for a message with images: Ask AI's own model moves to one that can see them.
+     *
+     * @param  array{provider: string, key: string, model: string, own: bool}  $ai
+     * @return array{provider: string, key: string, model: string, own: bool}
+     */
+    public static function forImages(array $ai): array
+    {
+        $vision = (string) config('services.groq.vision_model');
+
+        return ! $ai['own'] && ! self::seesImages($ai) && $vision !== '' ? [...$ai, 'model' => $vision] : $ai;
+    }
+
     public function key(Workspace|int $workspace, string $provider): ?WorkspaceAiKey
     {
         return WorkspaceAiKey::query()

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { themeColour } from '@/lib/themeColour';
 import { useUpgradeLink } from '@/composables/useUpgradeLink';
 import { trans } from 'laravel-vue-i18n';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
@@ -1901,7 +1902,7 @@ const focusRing =
                     :series="[
                         {
                             label: 'CPU',
-                            color: '#60A5FA',
+                            color: themeColour('--ds-chart', '#60A5FA'),
                             values: history.map((p) => p.cpu),
                         },
                     ]"

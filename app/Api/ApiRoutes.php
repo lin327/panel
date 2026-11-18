@@ -49,6 +49,9 @@ final class ApiRoutes
                 ['GET', 'activity', 'get_activity'],
                 ['GET', 'me/notifications', 'get_my_notifications'],
                 ['PATCH', 'me/notifications', 'update_my_notifications'],
+                ['GET', 'theme', 'get_dashboard_theme'],
+                ['PUT', 'theme/draft', 'update_dashboard_theme'],
+                ['POST', 'theme/publish', 'publish_dashboard_theme'],
             ],
             'Machines' => [
                 ['GET', 'machines', 'list_machines'],

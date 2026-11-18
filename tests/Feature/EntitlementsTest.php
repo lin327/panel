@@ -28,7 +28,7 @@ test('serveros.com is the default edition, where the plan decides', function () 
         ->and($business->limitOf(Limit::Machines))->toBe(25)
         ->and($essential->hasFeature(Feature::StaffRoles))->toBeFalse()
         ->and($essential->hasFeature(Feature::Automations))->toBeFalse()
-        ->and($essential->limitOf(Limit::Machines))->toBe(1)
+        ->and($essential->limitOf(Limit::Machines))->toBe(2)
         ->and($essential->limitOf(Limit::ApiRequestsPerMinute))->toBe((int) config('api.rate_limits.starter'));
 });
 

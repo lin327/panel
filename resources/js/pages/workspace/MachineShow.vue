@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { themeColour } from '@/lib/themeColour';
 import { useUpgradeLink } from '@/composables/useUpgradeLink';
 import { trans } from 'laravel-vue-i18n';
 import DiskUsagePanel from '@/components/machines/DiskUsagePanel.vue';
@@ -1127,7 +1128,7 @@ function usage(mount: string): { percent: number; free: number } | null {
                         :series="[
                             {
                                 label: 'CPU',
-                                color: '#60A5FA',
+                                color: themeColour('--ds-chart', '#60A5FA'),
                                 values: history.map((p) => p.cpu),
                                 peaks: history.map((p) => p.cpuMax),
                             },

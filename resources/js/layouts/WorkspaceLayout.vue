@@ -21,6 +21,7 @@ import type AssistantPanelComponent from '@/components/workspace/AssistantPanel.
 import WorkspacePageSkeleton from '@/components/workspace/WorkspacePageSkeleton.vue';
 import WorkspaceSidebar from '@/components/workspace/WorkspaceSidebar.vue';
 import WorkspaceNavBar from '@/components/workspace/WorkspaceNavBar.vue';
+import ThemeDraftBar from '@/components/workspace/ThemeDraftBar.vue';
 import { useAssistant } from '@/composables/useAssistant';
 import { useWorkspaceSwitch } from '@/composables/useWorkspaceSwitch';
 import { useIsDark } from '@/composables/useAppearance';
@@ -148,6 +149,7 @@ watch(
             >
                 <aside
                     v-if="layout === 'sidebar'"
+                    data-theme-part="sidebar"
                     class="hidden shrink-0 transition-[width] duration-200 ease-out motion-reduce:transition-none lg:block"
                     :class="collapsed ? 'w-14' : 'w-[228px]'"
                 >
@@ -160,10 +162,12 @@ watch(
                 </aside>
 
                 <div
+                    data-theme-part="content"
                     class="relative isolate flex min-h-0 min-w-0 flex-1 flex-col bg-(--ds-frame) lg:overflow-hidden lg:rounded-[14px] lg:shadow-[0_0_0_1px_var(--ds-border)] lg:dark:shadow-none"
                     :class="{ 'lg:ml-[3px]': layout === 'sidebar' }"
                 >
                     <WorkspaceNavBar
+                        data-theme-part="topbar"
                         :sidebar="layout === 'sidebar'"
                         @search="openSearch"
                         @menu="mobileOpen = true"
@@ -171,6 +175,7 @@ watch(
 
                     <main
                         id="main"
+                        data-theme-part="main"
                         class="relative isolate flex min-h-0 min-w-0 grow flex-col overflow-hidden"
                     >
                         <div
@@ -201,6 +206,7 @@ watch(
             <div
                 v-if="isDesktop"
                 id="assistant-panel"
+                data-theme-part="assistant"
                 class="hidden shrink-0 overflow-hidden transition-[width,opacity] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none lg:block"
                 :class="
                     assistantOpen
@@ -284,6 +290,7 @@ watch(
             <CommandPalette v-model:open="searching" />
             <WhatsNewDialog />
             <NotchToaster />
+            <ThemeDraftBar />
         </div>
     </div>
 </template>

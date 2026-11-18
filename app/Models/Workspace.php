@@ -35,6 +35,10 @@ use Illuminate\Support\Facades\Storage;
  * @property string $name
  * @property string $slug
  * @property string|null $logo_path
+ * @property string|null $theme_css
+ * @property string|null $theme_draft_css
+ * @property int|null $theme_draft_user_id
+ * @property CarbonImmutable|null $theme_published_at
  * @property Plan|null $plan
  * @property BillingInterval|null $billing_interval
  * @property CarbonImmutable|null $trial_ends_at
@@ -118,6 +122,7 @@ class Workspace extends Model
             'trial_ended_emailed_at' => 'datetime',
             'trial_emails_off_at' => 'datetime',
             'trial_last_ends_at' => 'datetime',
+            'theme_published_at' => 'datetime',
         ];
     }
 

@@ -339,7 +339,7 @@ const quickActions = computed(() => [
 ]);
 
 const envColors = [
-    'bg-[#3b7bff]',
+    'bg-[color:var(--ds-chart,#3b7bff)]',
     'bg-(--ds-text-secondary)',
     'bg-(--ds-text-faint)',
 ];

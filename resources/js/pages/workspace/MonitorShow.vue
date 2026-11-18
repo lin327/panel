@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { themeColour } from '@/lib/themeColour';
 import { trans } from 'laravel-vue-i18n';
 import { Head, router, usePage } from '@inertiajs/vue3';
 import { Ellipsis } from '@lucide/vue';
@@ -471,7 +472,7 @@ const focusRing =
                     :series="[
                         {
                             label: $t('Response'),
-                            color: '#60A5FA',
+                            color: themeColour('--ds-chart', '#60A5FA'),
                             values: chart.response,
                         },
                     ]"

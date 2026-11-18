@@ -49,6 +49,7 @@ use App\Http\Controllers\ServiceDetectController;
 use App\Http\Controllers\ServiceGroupController;
 use App\Http\Controllers\StatusIncidentController;
 use App\Http\Controllers\StatusSubscriptionController;
+use App\Http\Controllers\ThemeShareController;
 use App\Http\Controllers\UnsubscribeController;
 use App\Http\Controllers\UpdatesController;
 use App\Http\Controllers\WorkflowController;
@@ -73,6 +74,7 @@ use App\Http\Controllers\WorkspacePinController;
 use App\Http\Controllers\WorkspaceSettingsController;
 use App\Http\Controllers\WorkspaceStatusPageController;
 use App\Http\Controllers\WorkspaceSwitchController;
+use App\Http\Controllers\WorkspaceThemeController;
 use App\Http\Controllers\WorkspaceWelcomeController;
 use App\Http\Middleware\RecordWorkspaceVisit;
 use App\Http\Middleware\RequirePasswordIfSet;
@@ -315,6 +317,16 @@ Route::domain('{workspace:slug}.'.config('app.domain'))
         Route::delete('settings/logo', [WorkspaceSettingsController::class, 'destroyLogo'])->name('workspace.settings.logo.destroy');
         Route::get('settings/profile', [WorkspaceSettingsController::class, 'profile'])->name('workspace.settings.profile');
         Route::get('settings/appearance', [WorkspaceSettingsController::class, 'appearance'])->name('workspace.settings.appearance');
+        Route::get('settings/theme', [WorkspaceThemeController::class, 'show'])->name('workspace.settings.theme');
+        Route::put('settings/theme/draft', [WorkspaceThemeController::class, 'saveDraft'])->middleware('throttle:60,1')->name('workspace.settings.theme.draft');
+        Route::delete('settings/theme/draft', [WorkspaceThemeController::class, 'discardDraft'])->name('workspace.settings.theme.draft.destroy');
+        Route::post('settings/theme/publish', [WorkspaceThemeController::class, 'publish'])->middleware('throttle:30,1')->name('workspace.settings.theme.publish');
+        Route::delete('settings/theme', [WorkspaceThemeController::class, 'destroy'])->name('workspace.settings.theme.destroy');
+        Route::post('settings/theme/shares', [WorkspaceThemeController::class, 'storeShare'])->middleware('throttle:20,1')->name('workspace.settings.theme.shares.store');
+        Route::delete('settings/theme/shares/{share}', [WorkspaceThemeController::class, 'destroyShare'])->withoutScopedBindings()->name('workspace.settings.theme.shares.destroy');
+        Route::post('settings/theme/import', [WorkspaceThemeController::class, 'import'])->middleware('throttle:20,1')->name('workspace.settings.theme.import');
+        Route::post('settings/theme/images', [WorkspaceThemeController::class, 'storeImage'])->middleware('throttle:30,1')->name('workspace.settings.theme.images.store');
+        Route::delete('settings/theme/images/{image}', [WorkspaceThemeController::class, 'destroyImage'])->where('image', '[A-Za-z0-9._-]+')->name('workspace.settings.theme.images.destroy');
         Route::put('settings/notifications', [WorkspaceSettingsController::class, 'updateNotifications'])->middleware('throttle:30,1')->name('workspace.settings.notifications');
 
         Route::get('settings/members', [WorkspaceMemberController::class, 'index'])->name('workspace.members.index');
@@ -440,6 +452,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::post('admin/return', ImpersonationController::class)->middleware('auth')->name('impersonation.stop');
+
+Route::get('themes/{token}', [ThemeShareController::class, 'show'])->where('token', '[a-z0-9]{8,32}')->middleware('throttle:120,1')->name('themes.show');
+Route::middleware('auth')->group(function () {
+    Route::get('themes/{token}/add', [ThemeShareController::class, 'add'])->where('token', '[a-z0-9]{8,32}')->name('themes.add');
+    Route::post('themes/{token}/import', [ThemeShareController::class, 'import'])->where('token', '[a-z0-9]{8,32}')->middleware('throttle:20,1')->name('themes.import');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('invitations/{token}', [InvitationController::class, 'show'])->name('invitations.show');
