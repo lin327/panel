@@ -273,7 +273,6 @@ class AiProviders
                 'anthropic' => Http::withHeaders(['x-api-key' => $key, 'anthropic-version' => '2023-06-01'])->timeout(15)->get('https://api.anthropic.com/v1/models', ['limit' => 1]),
                 OpenCodeGo::PROVIDER => OpenCodeGo::http($key)->timeout(15)->get(OpenCodeGo::url(OpenCodeGo::MODELS)),
                 'openai' => Http::withToken($key)->timeout(15)->get('https://api.openai.com/v1/models'),
-                default => throw new RuntimeException('That AI provider isn’t supported.'),
             };
         } catch (ConnectionException) {
             throw new RuntimeException('Couldn’t reach '.self::PROVIDERS[$provider]['label'].' to check the key. Try again.');

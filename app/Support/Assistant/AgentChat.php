@@ -70,7 +70,6 @@ class AgentChat
             'anthropic' => $this->readAnthropic($response, $ai['model']),
             'openai' => $this->readResponses($response, $ai['model']),
             OpenCodeGo::PROVIDER, 'groq' => $this->readOpenai($response, $ai['model']),
-            default => throw new RuntimeException('The assistant isn’t set up on this ServerOS: there’s no model key.'),
         };
     }
 
@@ -161,6 +160,11 @@ class AgentChat
             ]);
     }
 
+    /**
+     * @param  array{provider: string, key: string, model: string, own: bool}  $ai
+     * @param  list<array<string, mixed>>  $messages
+     * @param  list<array{name: string, description: string, schema: array<string, mixed>}>  $tools
+     */
     private function groq(array $ai, string $model, string $system, array $messages, array $tools, int $maxTokens): Response
     {
         $wire = [['role' => 'system', 'content' => $system]];
